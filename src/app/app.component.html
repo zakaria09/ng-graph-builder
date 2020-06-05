@@ -1,0 +1,39 @@
+<div class="container">
+  <form [formGroup]="graphDataForm" (ngSubmit)="update()">
+
+    <select formControlName="chartType">
+      <option
+        *ngFor="let chartType of chartTypes" 
+        [value]="chartType">{{ chartType }}</option>
+    </select>
+
+    <div formArrayName="data">
+      <div 
+        *ngFor="let dataset of graphForm.controls; let i = index" [formGroupName]="i">
+        <div class="form-group">
+          <label>Graph Data Point Label (x-axis label)</label>
+          <input type="text" class="form-control" formControlName="label">
+        </div>
+        <div class="form-group">
+          <label>Graph Data Set {{ i + 1 }}</label>
+          <input type="number" class="form-control" formControlName="data">
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-secondary" (click)="addData()">Add Data Field</button>
+    <button type="submit" class="btn btn-primary">Create Graph</button>
+  </form>
+  
+  
+  <div style="display: block;" *ngIf="chartData">
+    <button (click)="reset()" class="btn btn-primary">Clear</button>
+    <canvas baseChart
+      [datasets]="chartData"
+      [labels]="chartLabels"
+      [options]="chartOptions"
+      [legend]="chartLegend"
+      [chartType]="chartType"></canvas>
+  </div>
+</div>
+
+<!-- <router-outlet></router-outlet> -->
