@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ChartDataSets } from 'chart.js';
-import { Label } from 'ng2-charts';
+import { Label, Color } from 'ng2-charts';
 import { BaseChartDirective } from 'ng2-charts';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
@@ -18,16 +18,27 @@ export class AppComponent {
   get graphForm() {
     return this.graphDataForm.get('data') as FormArray;
   }
+
   chartTypes = [
-    'line',
+    'doughnut',
     'bar',
-    'pie'
+    'pie',
   ];
+
+  colours = [
+    'blue',
+    'green',
+    'yellow',
+    'grey',
+    'orange',
+    'purple'
+  ]
 
   chartData: ChartDataSets[];
   chartLabels: Label[];
   chartType;
   chartLegend = true;
+  chartcolour: Color[];
   chartOptions = {
     scaleShowVerticalLines: false,
     responsive: true,
@@ -52,7 +63,8 @@ export class AppComponent {
   addData() {
     const graphInfo = this.formBuilder.group({
       label: [],
-      data: []
+      data: [],
+      colour: []
     });
     this.graphForm.push(graphInfo);
   }
@@ -65,12 +77,19 @@ export class AppComponent {
       });
     const dataSet = [];
     const dataLabels = [];
-    this.graphDataForm.value.data.map(dataLabelAndValues => {
-      dataSet.push(dataLabelAndValues.data);
-      dataLabels.push(dataLabelAndValues.label);
+    const dataSetColour = [
+      {
+        backgroundColor: []
+      }
+    ];
+    this.graphDataForm.value.data.map(graphObj => {
+      dataSet.push(graphObj.data);
+      dataLabels.push(graphObj.label);
+      dataSetColour[0].backgroundColor.push(graphObj.colour);
     });
     this.chartData = [ { data: dataSet } ];
     this.chartLabels = dataLabels;
+    this.chartcolour = dataSetColour;
   }
 
   reset() {
