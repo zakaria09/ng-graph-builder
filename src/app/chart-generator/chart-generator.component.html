@@ -1,0 +1,54 @@
+<div class="container">
+    <div class="card m-3">
+      <h5 class="card-header">Graph Generator</h5>
+      <form class="container" [formGroup]="graphDataForm" (ngSubmit)="update()">
+    
+        <div class="form-group">
+          <label>Graph Type</label>
+          <select class="custom-select" formControlName="chartType">
+            <option
+              *ngFor="let chartType of chartTypes" 
+              [value]="chartType">{{ chartType }}</option>
+          </select>
+        </div>
+    
+        <div formArrayName="data">
+          <div 
+            *ngFor="let dataset of graphForm.controls; let i = index" [formGroupName]="i">
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Graph Data Point Label</label>
+                <input type="text" class="form-control" formControlName="label">
+              </div>
+              <div class="form-group col-6">
+                <label>Graph Data Set {{ i + 1 }}</label>
+                <input type="number" class="form-control" formControlName="data">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Colour of Data Point</label>
+              <select formControlName="colour" class="custom-select">
+                <option *ngFor="let colour of colours" [value]="colour.value">{{ colour.text }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <div class="card-footer row">
+          <button type="button" class="btn btn-info mr-2" (click)="addData()">Add Data Field</button>
+          <button type="submit" class="btn btn-primary">Generate Graph</button>
+        </div>
+      </form>
+      
+      <div style="display: block;" *ngIf="chartData">
+        <button (click)="reset()" class="btn btn-primary">Clear</button>
+        <canvas baseChart
+          [datasets]="chartData"
+          [labels]="chartLabels"
+          [options]="chartOptions"
+          [legend]="chartLegend"
+          [chartType]="chartType"
+          [colors]="chartcolour"></canvas>
+      </div>
+    </div>
+</div>
